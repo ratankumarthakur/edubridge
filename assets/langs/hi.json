@@ -1,0 +1,23 @@
+{
+  "teacher_profile": "शिक्षक प्रोफ़ाइल",
+  "update_profile": "प्रोफ़ाइल अपडेट करें",
+  "description": "विवरण",
+  "state": "राज्य",
+  "college": "कॉलेज",
+  "qualifications": "योग्यता",
+  "subjects_fees": "विषय और शुल्क",
+  "classes_fees": "कक्षा और शुल्क",
+  "classes": "कक्षाएँ",
+  "subjects": "विषय",
+  "fees": "शुल्क",
+  "update": "अपडेट करें",
+  "profile_updated": "प्रोफ़ाइल सफलतापूर्वक अपडेट हो गई!",
+  "error_updating_profile": "प्रोफ़ाइल अपडेट करने में त्रुटि। कृपया पुनः प्रयास करें।",
+  "no_subjects": "कोई विषय उपलब्ध नहीं है।",
+  "no_classes": "कोई कक्षाएँ उपलब्ध नहीं हैं।",
+  "add_subject": "विषय जोड़ें",
+  "add_class": "कक्षा जोड़ें",
+  "subject_name": "विषय का नाम",
+  "class_name": "कक्षा का नाम",
+  "fee_amount": "शुल्क राशि"
+}

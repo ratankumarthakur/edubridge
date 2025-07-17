@@ -1,0 +1,23 @@
+{
+  "teacher_profile": "Teacher Profile",
+  "update_profile": "Update Profile",
+  "description": "Description",
+  "state": "State",
+  "college": "College",
+  "qualifications": "Qualifications",
+  "subjects_fees": "Subjects & Fees",
+  "classes_fees": "Classes & Fees",
+  "classes": "Classes",
+  "subjects": "Subjects",
+  "fees": "Fees",
+  "update": "Update",
+  "profile_updated": "Profile updated successfully!",
+  "error_updating_profile": "Error updating profile. Please try again.",
+  "no_subjects": "No subjects available.",
+  "no_classes": "No classes available.",
+  "add_subject": "Add Subject",
+  "add_class": "Add Class",
+  "subject_name": "Subject Name",
+  "class_name": "Class Name",
+  "fee_amount": "Fee Amount"
+}
