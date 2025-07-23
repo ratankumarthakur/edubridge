@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -106,7 +104,7 @@ class _student_feesState extends State<student_fees> {
       _uploadProgress = 0.0;
     });
 
-    final fileName = 'fees_screenshots/${widget.classId}/${_monthKey}/${widget.studentUid}.jpg';
+    final fileName = 'fees_screenshots/${widget.classId}/$_monthKey/${widget.studentUid}.jpg';
     final ref = FirebaseStorage.instance.ref().child(fileName);
     UploadTask uploadTask;
 

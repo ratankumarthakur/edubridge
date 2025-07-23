@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -212,7 +210,7 @@ class _teacher_feesState extends State<teacher_fees> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.className} - Fees'),
+        title: Text('${widget.className} - Fees',style: TextStyle(fontSize: 18),),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -236,7 +234,17 @@ class _teacher_feesState extends State<teacher_fees> {
                             ],
                           )
                         : (_imageUrl != null
-                            ? Image.network(_imageUrl!, fit: BoxFit.cover)
+                            ? ClipRRect(
+                              borderRadius: BorderRadius.circular(11),
+                              
+          child: Image.network(
+            _imageUrl!,
+            width: 180,
+            height: 180,
+            fit: BoxFit.cover,
+          ),
+        )
+
                             : const Center(
                                 child: Text('No QR/Photo uploaded'))),
                   ),
@@ -244,7 +252,7 @@ class _teacher_feesState extends State<teacher_fees> {
               ),
               const SizedBox(height: 12),
               ElevatedButton.icon(
-                icon: const Icon(Icons.upload),
+                icon: const Icon(Icons.upload,color: Colors.white,),
                 label: const Text('Upload QR/Photo'),
                 onPressed: _isUploading ? null : _pickImageAndUpload,
               ),

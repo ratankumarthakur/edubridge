@@ -1,7 +1,11 @@
+import 'package:chat/quiz/quizlist.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CreateQuizScreen extends StatefulWidget {
+  final String clas;
+  final String classname;
+  CreateQuizScreen({required this.clas,required this.classname});
   @override
   _CreateQuizScreenState createState() => _CreateQuizScreenState();
 }
@@ -19,6 +23,8 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => AddQuestionsScreen(
+              classname: widget.classname,
+            classId: widget.clas,
             quizTitle: title,
             quizCode: code,
           ),
@@ -63,8 +69,10 @@ class _CreateQuizScreenState extends State<CreateQuizScreen> {
 class AddQuestionsScreen extends StatefulWidget {
   final String quizTitle;
   final String quizCode;
+  final String classId;
+  final String classname;
 
-  AddQuestionsScreen({required this.quizTitle, required this.quizCode});
+  AddQuestionsScreen({required this.classId,required this.quizTitle, required this.quizCode, required this.classname});
 
   @override
   _AddQuestionsScreenState createState() => _AddQuestionsScreenState();
@@ -102,17 +110,41 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
 
   void _publishQuiz() async {
     final quiz = Quiz(
+      classname:widget.classname ,
+      //userid: ,
+      createdAt:FieldValue.serverTimestamp(),
       title: widget.quizTitle,
       code: widget.quizCode,
       questions: _questions,
     );
 
+    final firestore = FirebaseFirestore.instance;
+final quizRef = firestore
+    .collection('classes')
+    .doc(widget.classId)
+    .collection('quizzes')
+    .doc(); // Don't call .set() yet
+
+final quizId = quizRef.id;
+
     await FirebaseFirestore.instance
+        .collection('classes')
+        .doc(widget.classId)
         .collection('quizzes')
-        .add(quiz.toMap());
+        .doc(quizId)
+        .set(quiz.toMap());
+
+    await FirebaseFirestore.instance
+        .collection('quizzes').doc(quizId)
+        .set(quiz.toMap());
 
     // Navigate back or show success message
-    Navigator.pop(context);
+    Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => TeacherQuizzesPage(classname: widget.classname, classid: widget.classId,),
+  ),
+);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Quiz Published Successfully!')),
     );
@@ -170,14 +202,20 @@ class _AddQuestionsScreenState extends State<AddQuestionsScreen> {
 class Quiz {
   final String title;
   final String code;
+  final dynamic createdAt;
+  //final String userid;
+  final String classname;
   final List<Question> questions;
 
-  Quiz({required this.title, required this.code, required this.questions});
+  Quiz({required this.createdAt,required this.classname,required this.title, required this.code, required this.questions});
 
   Map<String, dynamic> toMap() {
     return {
       'title': title,
       'code': code,
+      //'created by':userid,
+      'createdAt':createdAt,
+      'class name':classname,
       'questions': questions.map((q) => q.toMap()).toList(),
     };
   }
