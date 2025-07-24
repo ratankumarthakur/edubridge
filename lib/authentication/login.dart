@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -61,200 +62,204 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
-            Container(),
+            //Container(),
             Container(
-              padding: const EdgeInsets.only(left: 35, top: 130),
+              padding: const EdgeInsets.only(left: 35, top: 140),
               child: const Text(
                 'Welcome\nBack',
                 style: TextStyle(color: Colors.white, fontSize: 33),
               ),
             ),
-            SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.5,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 35, right: 35),
-                      child: Column(
-                        children: [
+            Center(
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.5,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 400,
+                        margin: const EdgeInsets.only(left: 35, right: 35),
+                        child: Column(
+                          children: [
+                            TextField(
+                              controller: emailCtrl,
+                              style: const TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                fillColor: Colors.grey.shade100,
+                                filled: true,
+                                hintText: "Email",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            const SizedBox(height: 30),
                           TextField(
-                            controller: emailCtrl,
+                            controller: passCtrl,
                             style: const TextStyle(color: Colors.black),
+                            obscureText: _obscure,
                             decoration: InputDecoration(
                               fillColor: Colors.grey.shade100,
                               filled: true,
-                              hintText: "Email",
+                              hintText: "Password",
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-                          const SizedBox(height: 30),
-                        TextField(
-                          controller: passCtrl,
-                          style: const TextStyle(color: Colors.black),
-                          obscureText: _obscure,
-                          decoration: InputDecoration(
-                            fillColor: Colors.grey.shade100,
-                            filled: true,
-                            hintText: "Password",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscure ? Icons.visibility_off : Icons.visibility,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscure = !_obscure;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                          const SizedBox(height: 40),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Sign in',
-                                style: TextStyle(
-                                    fontSize: 27, fontWeight: FontWeight.w700),
-                              ),
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: const Color(0xff4c505b),
-                                child: loading
-                                    ? const CircularProgressIndicator(
-                                        color: Colors.white,
-                                      )
-                                    : IconButton(
-                                        color: Colors.white,
-                                        onPressed: login,
-                                        icon: const Icon(Icons.arrow_forward),
-                                      ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 40),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton(
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscure ? Icons.visibility_off : Icons.visibility,
+                                ),
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/signup');
+                                  setState(() {
+                                    _obscure = !_obscure;
+                                  });
                                 },
-                                child: const Text(
-                                  'Sign Up',
-                                  textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ),
+                            const SizedBox(height: 40),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Sign in',
                                   style: TextStyle(
-                                    //decoration: TextDecoration.underline,
-                                    color: Color.fromARGB(255, 0, 191, 254),
-                                    fontSize: 18,
+                                      fontSize: 27, fontWeight: FontWeight.w700),
+                                ),
+                                CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: const Color(0xff4c505b),
+                                  child: loading
+                                      ? const CircularProgressIndicator(
+                                          color: Colors.white,
+                                        )
+                                      : IconButton(
+                                          color: Colors.white,
+                                          onPressed: login,
+                                          icon: const Icon(Icons.arrow_forward),
+                                        ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 40),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, '/signup');
+                                  },
+                                  child: const Text(
+                                    'Sign Up',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      //decoration: TextDecoration.underline,
+                                      color: Color.fromARGB(255, 0, 191, 254),
+                                      fontSize: 18,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  final emailController = TextEditingController(
-                                      text: emailCtrl.text);
-                                  final result = await showDialog<String>(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text('Reset Password'),
-                                      content: TextField(
-                                        controller: emailController,
-                                        decoration: const InputDecoration(
-                                            hintText: 'Enter your email'),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: const Text('Cancel'),
+                                TextButton(
+                                  onPressed: () async {
+                                    final emailController = TextEditingController(
+                                        text: emailCtrl.text);
+                                    final result = await showDialog<String>(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text('Reset Password'),
+                                        content: TextField(
+                                          controller: emailController,
+                                          decoration: const InputDecoration(
+                                              hintText: 'Enter your email'),
                                         ),
-                                        TextButton(
-                                          onPressed: () => Navigator.pop(
-                                              context,
-                                              emailController.text.trim()),
-                                          child: const Text('Send'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                context,
+                                                emailController.text.trim()),
+                                            child: const Text('Send'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                    if (result != null && result.isNotEmpty) {
+                                      try {
+                                        await FirebaseAuth.instance
+                                            .sendPasswordResetEmail(
+                                                email: result);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Password reset link sent!')),
+                                        );
+                                      } catch (e) {
+                                        final errorMsg = e
+                                            .toString()
+                                            .replaceAll(RegExp(r'\[.*?\]'), '')
+                                            .trim();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text('Error: $errorMsg')),
+                                        );
+                                      }
+                                    }
+                                  },
+                                  child: const Text(
+                                    'Forgot Password',
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: Color(0xff4c505b),
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10,),
+                            ElevatedButton(
+                              onPressed: googleLogin,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey.shade200,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child:  Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Image.asset(
+                                          'assets/google_logo.png',
+                                          height: 24,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        const Text(
+                                          'Sign in with Google',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                          ),
                                         ),
                                       ],
                                     ),
-                                  );
-                                  if (result != null && result.isNotEmpty) {
-                                    try {
-                                      await FirebaseAuth.instance
-                                          .sendPasswordResetEmail(
-                                              email: result);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                'Password reset link sent!')),
-                                      );
-                                    } catch (e) {
-                                      final errorMsg = e
-                                          .toString()
-                                          .replaceAll(RegExp(r'\[.*?\]'), '')
-                                          .trim();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text('Error: $errorMsg')),
-                                      );
-                                    }
-                                  }
-                                },
-                                child: const Text(
-                                  'Forgot Password',
-                                  style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: Color(0xff4c505b),
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          ElevatedButton(
-                            onPressed: googleLogin,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 50, vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
                             ),
-                            child:  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Image.asset(
-                                        'assets/google_logo.png',
-                                        height: 24,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      const Text(
-                                        'Sign in with Google',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
