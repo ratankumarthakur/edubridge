@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ScheduleListPage extends StatefulWidget {
   final String classId;
@@ -19,7 +20,7 @@ class _ScheduleListPageState extends State<ScheduleListPage> {
     DateTime? pickedDate;
     TimeOfDay? pickedTime;
     String description = '';
-    //String class_name;
+    bool isLink = false;
     await showDialog(
       context: context,
       builder: (context) {
@@ -64,6 +65,17 @@ class _ScheduleListPageState extends State<ScheduleListPage> {
                   decoration: const InputDecoration(labelText: 'Description'),
                   onChanged: (val) => description = val,
                 ),
+                Row(
+                  children: [
+                    const Text('Is Link?'),
+                    Switch(
+                      value: isLink,
+                      onChanged: (val) {
+                        setStateDialog(() => isLink = val);
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
             actions: [
@@ -91,6 +103,7 @@ class _ScheduleListPageState extends State<ScheduleListPage> {
                     'class_name': widget.className,
                     'dateTime': dt,
                     'description': descCtrl.text,
+                    'isLink': isLink,
                     'createdAt': FieldValue.serverTimestamp(),
                   });
                   await FirebaseFirestore.instance
@@ -101,6 +114,7 @@ class _ScheduleListPageState extends State<ScheduleListPage> {
                     'class_name': widget.className,
                     'dateTime': dt,
                     'description': descCtrl.text,
+                    'isLink': isLink,
                     'createdAt': FieldValue.serverTimestamp(),
                   });
                   Navigator.pop(context);
@@ -153,95 +167,120 @@ class _ScheduleListPageState extends State<ScheduleListPage> {
             return const Center(child: Text('No future schedules.'));
           }
           return ListView.builder(
-  itemCount: futureDocs.length,
-  itemBuilder: (context, i) {
-    final docRef = futureDocs[i].reference;
-    final data = futureDocs[i].data() as Map<String, dynamic>;
-    final dt = (data['dateTime'] as Timestamp).toDate();
+            itemCount: futureDocs.length,
+            itemBuilder: (context, i) {
+              final docRef = futureDocs[i].reference;
+              final data = futureDocs[i].data() as Map<String, dynamic>;
+              final dt = (data['dateTime'] as Timestamp).toDate();
+              final isLink = data['isLink'] == true;
+              final description = data['description'] ?? '';
 
-    return Dismissible(
-      key: ValueKey(docRef.id), // unique key required
-      direction: DismissDirection.endToStart, // right to left swipe
-      background: Container(
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        color: Colors.red,
-        child: const Icon(Icons.delete, color: Colors.white),
-      ),
-      confirmDismiss: (direction) async {
-        // Optional: add confirm dialog here
-        return await showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text('Delete Schedule?'),
-            content: const Text('Are you sure you want to delete this schedule?'),
-            actions: [
-              TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: const Text('Cancel')),
-              ElevatedButton(onPressed: () => Navigator.of(ctx).pop(true), child: const Text('Delete')),
-            ],
-          ),
-        );
-      },
-      onDismissed: (direction) async {
-        await docRef.delete();
-
-        final userDocRef = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user!.uid)
-            .collection('schedules')
-            .where('class_name', isEqualTo: data['class_name'])
-            .where('dateTime', isEqualTo: data['dateTime'])
-            .limit(1)
-            .get();
-
-        if (userDocRef.docs.isNotEmpty) {
-          await userDocRef.docs.first.reference.delete();
-        }
-      },
-      child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.network(
-                              // or use Image.asset for local images
-                              'https://static.vecteezy.com/system/resources/previews/046/386/166/non_2x/abstract-blue-and-pink-glowing-lines-curved-overlapping-background-template-premium-award-design-vector.jpg',
-                              height: 100,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Container(
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.black.withOpacity(
-                                  0.1), // dark overlay for contrast
-                            ),
-                          ),
-                          Positioned.fill(
-                            child: Card(
-                              color: Colors.transparent,
-        child: Center(
-          child: ListTile(
-            title: Text(data['class_name'] ?? '',style: TextStyle(fontSize: 12,color: Colors.white,fontWeight: FontWeight.bold),),
-            subtitle: Text(data['description'] ?? '',style: TextStyle(color: Colors.white70)),
-            trailing: Text(
-              'Scheduled at:\n'
-              '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} '
-              '${TimeOfDay.fromDateTime(dt).format(context)}',style: TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.bold)
-            ),
-          ),
-        ),
-      ),),
-                          
-                        ],
+              return Dismissible(
+                key: ValueKey(docRef.id),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  color: Colors.red,
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                confirmDismiss: (direction) async {
+                  return await showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text('Delete Schedule?'),
+                      content: const Text('Are you sure you want to delete this schedule?'),
+                      actions: [
+                        TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: const Text('Cancel')),
+                        ElevatedButton(onPressed: () => Navigator.of(ctx).pop(true), child: const Text('Delete')),
+                      ],
+                    ),
+                  );
+                },
+                onDismissed: (direction) async {
+                  await docRef.delete();
+                  final userDocRef = await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(user!.uid)
+                      .collection('schedules')
+                      .where('class_name', isEqualTo: data['class_name'])
+                      .where('dateTime', isEqualTo: data['dateTime'])
+                      .limit(1)
+                      .get();
+                  if (userDocRef.docs.isNotEmpty) {
+                    await userDocRef.docs.first.reference.delete();
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          'https://static.vecteezy.com/system/resources/previews/046/386/166/non_2x/abstract-blue-and-pink-glowing-lines-curved-overlapping-background-template-premium-award-design-vector.jpg',
+                          height: 100,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    )
-    );
-  },
-);
+                      Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.black.withOpacity(0.1),
+                        ),
+                      ),
+                      Positioned.fill(
+                        child: Card(
+                          color: Colors.transparent,
+                          child: Center(
+                            child: ListTile(
+                              title: Text(
+                                data['class_name'] ?? '',
+                                style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Row(
+                                children: [
+                                  Text(description, style: TextStyle(color: Colors.white70)),
+                                  if (isLink)
+                                    IconButton(
+                                      icon: const Icon(Icons.link, color: Colors.white),
+                                      onPressed: () async {
+                                        if (Uri.tryParse(description)?.hasAbsolutePath ?? false) {
+                                          // ignore: deprecated_member_use
+                                          await launchUrl(Uri.parse(description));
+                                        } else {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text('Invalid URL')),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                ],
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'Scheduled at:\n'
+                                    '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} '
+                                    '${TimeOfDay.fromDateTime(dt).format(context)}',
+                                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                                  ),
+                                  
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
         },
       ),
       

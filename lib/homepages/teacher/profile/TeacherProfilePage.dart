@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TeacherProfilePage extends StatefulWidget {
-  const TeacherProfilePage({super.key});
+   TeacherProfilePage({super.key});
 
   @override
   State<TeacherProfilePage> createState() => _TeacherProfilePageState();
@@ -206,10 +206,12 @@ class _TeacherProfilePageState extends State<TeacherProfilePage> {
   }
 }
 
+
+
 /// Helper for simple info tiles
 Widget buildInfoTile(Color x, Color y, String label, String value) {
   return Padding(
-    padding: const EdgeInsets.all(12.0),
+    padding:  EdgeInsets.all(12.0),
     child: Card(
       elevation: 5,
       color: Colors.purple.shade50,
@@ -222,7 +224,7 @@ Widget buildInfoTile(Color x, Color y, String label, String value) {
           children: [
             Text('$label: ',
                 style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                     TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             Expanded(
                 child: Text(
               value,

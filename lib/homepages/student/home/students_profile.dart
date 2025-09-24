@@ -34,9 +34,10 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Student Profile'),
+       
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(Icons.group,color: Colors.white,),
             tooltip: 'See available teachers list',
             onPressed: (){
               Navigator.push(
@@ -141,34 +142,11 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
                               ),
                               Text(
                                 '${studentData['studentClass']}',
-                                style: TextStyle(color: Colors.purple),
+                                style: TextStyle(fontWeight: FontWeight.bold,color: Colors.purple),
                               ),
                             ],
                           ),
-                        if (studentData['studentSubjects'] != null &&
-                            (studentData['studentSubjects'] as List).isNotEmpty)
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Subjects :',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
-                              ),
-                              ...List.generate(
-                                (studentData['studentSubjects'] as List).length,
-                                (i) {
-                                  final subj =
-                                      studentData['studentSubjects'][i];
-                                  return Text(
-                                    '${subj['name']}',
-                                    style: TextStyle(color: Colors.purple),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        if (studentData['minFees'] != null &&
+                          if (studentData['minFees'] != null &&
                             studentData['maxFees'] != null)
                           Row(
                             children: [
@@ -179,9 +157,34 @@ class _StudentProfilePageState extends State<StudentProfilePage> {
                               ),
                               Text(
                                   '₹${studentData['minFees']} - ₹${studentData['maxFees']}',
-                                  style: TextStyle(color: Colors.purple))
+                                  style: TextStyle(fontWeight: FontWeight.bold,color: Colors.purple))
                             ],
                           ),
+                        if (studentData['studentSubjects'] != null &&
+                            (studentData['studentSubjects'] as List).isNotEmpty)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Subjects to study :',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
+                              ),
+                              ...List.generate(
+                                (studentData['studentSubjects'] as List).length,
+                                (i) {
+                                  final subj =
+                                      studentData['studentSubjects'][i];
+                                  return Text(
+                                    '${subj['name']}',
+                                    style: TextStyle(fontWeight: FontWeight.bold,color: Colors.purple),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        
+                          
                         SizedBox(
                           height: 20,
                         ),

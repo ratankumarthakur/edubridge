@@ -1,4 +1,3 @@
-import 'package:chat/chat/login_screen.dart';
 import 'package:chat/homepages/student/home/students_profile.dart';
 import 'package:chat/homepages/teacher/class/TClass.dart';
 import 'package:chat/homepages/teacher/THome.dart';
@@ -25,6 +24,7 @@ void main() async {
       authDomain: "sems-4c37f.firebaseapp.com",
       messagingSenderId: "61768828498",
       projectId: "sems-4c37f",
+
     ),
   );
 
@@ -61,6 +61,10 @@ class ChatApp extends StatelessWidget {
               fontFamily: 'nunito',
             ),
           ),
+          textSelectionTheme: TextSelectionThemeData(
+          selectionColor: Colors.red.withOpacity(0.4), // Change the selection highlight color
+          //cursorColor: Colors.red, // Change the cursor color
+        ),
           scaffoldBackgroundColor: Colors.purple.shade50,
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
@@ -82,7 +86,7 @@ class ChatApp extends StatelessWidget {
         '/login': (_) => const LoginPage(),
         '/signup': (_) => const SignupPage(),
         '/t_home': (_) => const THome(),
-        '/teacherProfilePage': (_) => const TeacherProfilePage(),
+        '/teacherProfilePage': (_) =>  TeacherProfilePage(),
         '/t_class': (_) => const TClass(),
         '/teacher_schedule_page': (_) => TeacherSchedulesPage(),
         '/teacher_list_page': (_) => TeachersListPage(),
@@ -94,3 +98,30 @@ class ChatApp extends StatelessWidget {
     );
   }
 }
+
+class AuthHomePage extends StatelessWidget {
+  const AuthHomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Welcome')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text('Login'),
+              onPressed: () => Navigator.pushNamed(context, '/login'),
+            ),
+            ElevatedButton(
+              child: const Text('Sign Up'),
+              onPressed: () => Navigator.pushNamed(context, '/signup'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

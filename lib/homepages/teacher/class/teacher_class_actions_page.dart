@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:avatar_glow/avatar_glow.dart';
-import 'package:chat/authentication/LoginPage.dart';
 import 'package:chat/chat/latest.dart';
 import 'package:chat/homepages/teacher/class/schedule_list.dart';
 import 'package:chat/liveclasses/teacherside.dart';
@@ -37,7 +35,7 @@ class _TeacherClassActionsPageState extends State<TeacherClassActionsPage> {
   double _uploadProgress = 0.0;
   String? _imageUrl;
   String? _errorMsg;
-
+  double w = 100.0;
   @override
   void initState() {
     super.initState();
@@ -137,6 +135,7 @@ class _TeacherClassActionsPageState extends State<TeacherClassActionsPage> {
 
   @override
   Widget build(BuildContext context) {
+    w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -279,10 +278,11 @@ class _TeacherClassActionsPageState extends State<TeacherClassActionsPage> {
           ),
         ),
       ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 24),
               padding: const EdgeInsets.all(16),
@@ -321,228 +321,97 @@ class _TeacherClassActionsPageState extends State<TeacherClassActionsPage> {
                 ],
               ),
             ),
-            //const SizedBox(height: 12),
-            TextButton(
-                          onPressed: () => Get.to(() =>teacherside() ),
-                          child: Text(
-                            'Live class',
-                            style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
+            const SizedBox(height: 12),
+            GlassImageCard(
+              imageUrl:
+                  'https://media.istockphoto.com/id/1330795444/vector/purple-satin-wavy-background-silk-fabric-texture-waves-and-swirl-drapery-abstract-pattern.jpg?s=612x612&w=0&k=20&c=K98gTLp9B8XAATv2aHtgCRai21UxPWyzlS2YnJ_GYs8=',
+              text: 'Take live class',
+              width: MediaQuery.sizeOf(context).width > 600 ? 130 : 100,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => teacherside(
+                            classId: widget.classId,
+                            className: widget.className,
                           )),
-                          TextButton(
-                          onPressed: () => Get.to(() => teacher_fees(
-                              classId: widget.classId,
-                              className: widget.className,
-                            ),),
-                          child: Text(
-                            'Fees',
-                            style: TextStyle(
-                                color: const Color.fromARGB(255, 2, 75, 4),
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          )),
-                          TextButton(
-                          onPressed: ()  => Get.to(() => TeacherQuizzesPage(
-                            classname: widget.className,
-                            classid: widget.classId,
-                          ),),
-                          child: Text(
-                            'Quiz',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 2, 75, 4),
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          )),
-                          TextButton(
-                        
-                          onPressed: ()  => Get.to(() => ScheduleListPage(
-                                classId: widget.classId, className: widget.className, ),),  
-                          child: Text(
-                      
-                            'Schedule',
-                            style: TextStyle(
-                                color: const Color.fromARGB(255, 24, 94, 35),
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold),
-                          )),
-                          TextButton(
-                        
-                          onPressed: ()  => Get.to(() => ClassChatPage(
-                                classId: widget.classId, ),),  
-                          child: Text(
-                      
-                            'Chat',
-                            style: TextStyle(
-                                color: const Color.fromARGB(255, 24, 94, 35),
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold),
-                          )),
-
-            // Stack(
-            //   children: [
-            //     Image.asset('assets/class.png'),
-            //     Positioned(
-            //         left: 147,
-            //         top: 100,
-            //         child: AvatarGlow(
-            //           glowColor: const Color.fromARGB(255, 4, 245, 12),
-            //           glowCount: 3,
-                      
-            //           child: TextButton(
-            //               onPressed: () => Get.to(() =>teacherside() ),
-            //               child: Text(
-            //                 'Live class',
-            //                 style: TextStyle(
-            //                     color: Colors.white,
-            //                     fontSize: 20,
-            //                     fontWeight: FontWeight.bold),
-            //               )),
-            //         )),
-            //         Positioned(
-            //         left: 30,
-            //         top: 210,
-            //         child: AvatarGlow(
-            //           glowColor: const Color.fromARGB(255, 248, 183, 4),
-            //           child: TextButton(
-            //               onPressed: () => Get.to(() => teacher_fees(
-            //                   classId: widget.classId,
-            //                   className: widget.className,
-            //                 ),),
-            //               child: Text(
-            //                 'Fees',
-            //                 style: TextStyle(
-            //                     color: const Color.fromARGB(255, 2, 75, 4),
-            //                     fontSize: 20,
-            //                     fontWeight: FontWeight.bold),
-            //               )),
-            //         )),
-            //     Positioned(
-            //         left: 165,
-            //         top: 210,
-            //         child: AvatarGlow(
-            //           glowColor: const Color.fromARGB(255, 248, 183, 4),
-            //           child: TextButton(
-            //               onPressed: ()  => Get.to(() => TeacherQuizzesPage(
-            //                 classname: widget.className,
-            //                 classid: widget.classId,
-            //               ),),
-            //               child: Text(
-            //                 'Quiz',
-            //                 style: TextStyle(
-            //                     color: Color.fromARGB(255, 2, 75, 4),
-            //                     fontSize: 20,
-            //                     fontWeight: FontWeight.bold),
-            //               )),
-            //         )),
-                
-            //     Positioned(
-            //         right: 19,
-            //         top: 210,
-            //         child: AvatarGlow(
-            //           glowColor:  const Color.fromARGB(255, 248, 183, 4),
-            //           child: TextButton(
-                        
-            //               onPressed: ()  => Get.to(() => ClassChatPage(
-            //                     classId: widget.classId, ),),  
-            //               child: Text(
-                      
-            //                 'Schedule',
-            //                 style: TextStyle(
-            //                     color: const Color.fromARGB(255, 24, 94, 35),
-            //                     fontSize: 18,
-            //                     fontWeight: FontWeight.bold),
-            //               )),
-            //         )),
-                        
-                
-                
-            //   ],
-            // )
-          ],
-        ),
-      ),
-    );
-  }
-  Widget glowingButton({
-  required String label,
-  required Widget targetPage,
-  double top = 100,
-  double left = 0,
-  double? right,
-  Color glowColor = const Color.fromARGB(255, 4, 245, 12),
-  Color textColor = Colors.white,
-}) {
-  return Positioned(
-    top: top,
-    left: left,
-    right: right ?? 0,
-    child: AvatarGlow(
-      glowColor: glowColor,
-      glowRadiusFactor: 1.2,
-      //endRadius: 70,
-      child: TextButton(
-        onPressed: () => Get.to(() => targetPage),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'nunito',
-          ),
-        ),
-      ),
-    ),
-  );
-}
-  Widget gradientImageButton({
-    required String label,
-    required Widget targetPage,
-    double height = 50,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: height,
-        width: 200,
-        decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage('assets/background.jpg'),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.circular(32),
-        ),
-        child: Stack(
-          children: [
-            // Gradient overlay
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(32),
-              ),
+                );
+              },
             ),
-            // Transparent button on top
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
+            SizedBox(
+              height: 25,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GlassImageCard(
+                  imageUrl:
+                      'https://media.istockphoto.com/id/1330795444/vector/purple-satin-wavy-background-silk-fabric-texture-waves-and-swirl-drapery-abstract-pattern.jpg?s=612x612&w=0&k=20&c=K98gTLp9B8XAATv2aHtgCRai21UxPWyzlS2YnJ_GYs8=',
+                  text: 'Manage Fees',
+                  width: MediaQuery.sizeOf(context).width > 600 ? 130 : 100,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => teacher_fees(
+                          classId: widget.classId,
+                          className: widget.className,
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              ),
-              onPressed: () => Get.to(() => targetPage),
-              child: Center(
-                child: Text(
-                  label,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    fontFamily: 'nunito-regular',
-                  ),
+                GlassImageCard(
+                  imageUrl:
+                      'https://media.istockphoto.com/id/1330795444/vector/purple-satin-wavy-background-silk-fabric-texture-waves-and-swirl-drapery-abstract-pattern.jpg?s=612x612&w=0&k=20&c=K98gTLp9B8XAATv2aHtgCRai21UxPWyzlS2YnJ_GYs8=',
+                  text: 'Quiz',
+                  width: MediaQuery.sizeOf(context).width > 600 ? 130 : 100,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TeacherQuizzesPage(
+                          classname: widget.className,
+                          classid: widget.classId,
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              ),
+                GlassImageCard(
+                  imageUrl:
+                      'https://media.istockphoto.com/id/1330795444/vector/purple-satin-wavy-background-silk-fabric-texture-waves-and-swirl-drapery-abstract-pattern.jpg?s=612x612&w=0&k=20&c=K98gTLp9B8XAATv2aHtgCRai21UxPWyzlS2YnJ_GYs8=',
+                  text: 'Schedule',
+                  width: MediaQuery.sizeOf(context).width > 600 ? 130 : 100,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ScheduleListPage(
+                          classId: widget.classId,
+                          className: widget.className,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                GlassImageCard(
+                  imageUrl:
+                      'https://media.istockphoto.com/id/1330795444/vector/purple-satin-wavy-background-silk-fabric-texture-waves-and-swirl-drapery-abstract-pattern.jpg?s=612x612&w=0&k=20&c=K98gTLp9B8XAATv2aHtgCRai21UxPWyzlS2YnJ_GYs8=',
+                  text: 'Chat',
+                  width: MediaQuery.sizeOf(context).width > 600 ? 130 : 100,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ClassChatPage(
+                          classId: widget.classId,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),
@@ -602,3 +471,104 @@ class _TeacherClassActionsPageState extends State<TeacherClassActionsPage> {
   }
 }
 
+class GlassImageCard extends StatelessWidget {
+  final String imageUrl;
+  final String text;
+  final double width;
+  final double aspectRatio;
+  final double cornerRadius;
+  final VoidCallback? onTap; // Callback for tap events
+
+  const GlassImageCard({
+    super.key,
+    required this.imageUrl,
+    required this.text,
+    this.width = 30,
+    this.aspectRatio = 2.0, // 1.0 makes it a square
+    this.cornerRadius = 20.0,
+    this.onTap, // Add onTap to the constructor
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Wrap the entire card in a GestureDetector to make it tappable
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRRect(
+        // This clips the child (the Stack) to have rounded corners
+        borderRadius: BorderRadius.circular(cornerRadius),
+        child: SizedBox(
+          width: width,
+          child: AspectRatio(
+            aspectRatio: aspectRatio,
+            child: Stack(
+              // Stack allows us to layer widgets on top of each other
+              fit: StackFit.expand, // Makes children fill the Stack
+              children: [
+                // Layer 1: The Image
+                Image.asset(
+                  'assets/background.jpg',
+                  fit: BoxFit.cover, // Ensures the image covers the whole area
+                  // A loading builder is good practice for network images
+                  // loadingBuilder: (context, child, loadingProgress) {
+                  //   if (loadingProgress == null) return child;
+                  //   return const Center(child: CircularProgressIndicator());
+                  // },
+                  // An error builder handles cases where the image fails to load
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.broken_image, color: Colors.grey),
+                    );
+                  },
+                ),
+
+                // Layer 2: The Text
+                Center(
+                  // bottom: 2.0,
+                  // left: 12.0,
+                  // right: 12.0,
+                  child: Text(
+                    text,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      shadows: <Shadow>[
+                        Shadow(
+                          offset: Offset(0.0, 1.0),
+                          blurRadius: 4.0,
+                          color: Color.fromARGB(150, 0, 0, 0),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                // Layer 3: The Shiny Glass Overlay
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        // The gradient creates the "shiny" or "glare" effect
+                        Colors.white.withOpacity(0.3),
+                        Colors.white.withOpacity(0.05),
+                      ],
+                      stops: const [
+                        0.0,
+                        0.6
+                      ], // Controls where the gradient transitions
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

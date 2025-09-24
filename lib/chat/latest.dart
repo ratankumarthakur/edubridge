@@ -28,7 +28,7 @@ class _ClassChatPageState extends State<ClassChatPage> {
         _usernamesCache[senderUid]!,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 14,
+          fontSize: 12,
           color: isAdmin(senderUid) ? Colors.deepPurple : Colors.grey[800],
         ),
       );
@@ -43,7 +43,7 @@ class _ClassChatPageState extends State<ClassChatPage> {
       name,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 14,
+        fontSize: 12,
         color: isAdmin(senderUid) ? Colors.deepPurple : Colors.grey[800],
       ),
     );

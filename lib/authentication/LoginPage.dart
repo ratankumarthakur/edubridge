@@ -47,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
     }
     setState(() => loading = false);
   }
+
   bool _obscure = true;
   @override
   Widget build(BuildContext context) {
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
               child: SingleChildScrollView(
                 child: Container(
                   padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.5,
+                    top: MediaQuery.of(context).size.height * 0.4,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,29 +98,31 @@ class _LoginPageState extends State<LoginPage> {
                               keyboardType: TextInputType.emailAddress,
                             ),
                             const SizedBox(height: 30),
-                          TextField(
-                            controller: passCtrl,
-                            style: const TextStyle(color: Colors.black),
-                            obscureText: _obscure,
-                            decoration: InputDecoration(
-                              fillColor: Colors.grey.shade100,
-                              filled: true,
-                              hintText: "Password",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _obscure ? Icons.visibility_off : Icons.visibility,
+                            TextField(
+                              controller: passCtrl,
+                              style: const TextStyle(color: Colors.black),
+                              obscureText: _obscure,
+                              decoration: InputDecoration(
+                                fillColor: Colors.grey.shade100,
+                                filled: true,
+                                hintText: "Password",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                onPressed: () {
-                                  setState(() {
-                                    _obscure = !_obscure;
-                                  });
-                                },
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _obscure
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscure = !_obscure;
+                                    });
+                                  },
+                                ),
                               ),
                             ),
-                          ),
                             const SizedBox(height: 40),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -127,7 +130,8 @@ class _LoginPageState extends State<LoginPage> {
                                 const Text(
                                   'Sign in',
                                   style: TextStyle(
-                                      fontSize: 27, fontWeight: FontWeight.w700),
+                                      fontSize: 27,
+                                      fontWeight: FontWeight.w700),
                                 ),
                                 CircleAvatar(
                                   radius: 30,
@@ -164,8 +168,9 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 TextButton(
                                   onPressed: () async {
-                                    final emailController = TextEditingController(
-                                        text: emailCtrl.text);
+                                    final emailController =
+                                        TextEditingController(
+                                            text: emailCtrl.text);
                                     final result = await showDialog<String>(
                                       context: context,
                                       builder: (context) => AlertDialog(
@@ -209,7 +214,8 @@ class _LoginPageState extends State<LoginPage> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
-                                              content: Text('Error: $errorMsg')),
+                                              content:
+                                                  Text('Error: $errorMsg')),
                                         );
                                       }
                                     }
@@ -225,7 +231,9 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 10,),
+                            SizedBox(
+                              height: 10,
+                            ),
                             ElevatedButton(
                               onPressed: googleLogin,
                               style: ElevatedButton.styleFrom(
@@ -236,23 +244,23 @@ class _LoginPageState extends State<LoginPage> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              child:  Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset(
-                                          'assets/google_logo.png',
-                                          height: 24,
-                                        ),
-                                        const SizedBox(width: 10),
-                                        const Text(
-                                          'Sign in with Google',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ],
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Image.asset(
+                                    'assets/google_logo.png',
+                                    height: 24,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  const Text(
+                                    'Sign in with Google',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
                                     ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -275,7 +283,8 @@ class _LoginPageState extends State<LoginPage> {
       if (kIsWeb) {
         // Web: use signInWithPopup
         GoogleAuthProvider googleProvider = GoogleAuthProvider();
-        userCredential = await FirebaseAuth.instance.signInWithPopup(googleProvider);
+        userCredential =
+            await FirebaseAuth.instance.signInWithPopup(googleProvider);
       } else {
         // Mobile: use google_sign_in
         final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -283,12 +292,14 @@ class _LoginPageState extends State<LoginPage> {
           setState(() => loading = false);
           return;
         }
-        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
-        userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+        userCredential =
+            await FirebaseAuth.instance.signInWithCredential(credential);
       }
 
       // Check if user doc exists
@@ -331,7 +342,7 @@ class _LoginPageState extends State<LoginPage> {
           'name': userCredential.user!.displayName ?? '',
           'email': userCredential.user!.email ?? '',
           'role': userRole,
-           // <-- Add this line
+          // <-- Add this line
         });
       } else {
         userRole = userDoc['role'];

@@ -184,14 +184,32 @@ class _student_feesState extends State<student_fees> {
               Text('Scan the QR code below to pay your fees:', ),
               const SizedBox(height: 12),
               Center(
-                child: SizedBox(
-                  height: 180,
-                  width: 180,
-                  child: Card(
-                    elevation: 2,
-                    child: _qrUrl != null
-                        ? Image.network(_qrUrl!, fit: BoxFit.cover)
-                        : const Center(child: Text('No QR/Photo uploaded')),
+                child: GestureDetector(
+                  onTap: _qrUrl != null
+                      ? () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => Dialog(
+                              child: Container(
+                                padding: const EdgeInsets.all(16),
+                                color: Colors.white,
+                                child: _qrUrl != null
+                                    ? Image.network(_qrUrl!, fit: BoxFit.contain)
+                                    : const Center(child: Text('No QR/Photo uploaded')),
+                              ),
+                            ),
+                          );
+                        }
+                      : null,
+                  child: SizedBox(
+                    height: 180,
+                    width: 180,
+                    child: Card(
+                      elevation: 2,
+                      child: _qrUrl != null
+                          ? Image.network(_qrUrl!, fit: BoxFit.cover)
+                          : const Center(child: Text('No QR/Photo uploaded')),
+                    ),
                   ),
                 ),
               ),
