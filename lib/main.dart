@@ -61,13 +61,12 @@ class ChatApp extends StatelessWidget {
               fontFamily: 'nunito',
             ),
           ),
-<<<<<<< HEAD
+
           textSelectionTheme: TextSelectionThemeData(
           selectionColor: Colors.red.withOpacity(0.4), // Change the selection highlight color
           //cursorColor: Colors.red, // Change the cursor color
         ),
-=======
->>>>>>> 417d554df605b5e72977972d923a45863fc10ff9
+
           scaffoldBackgroundColor: Colors.purple.shade50,
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
@@ -89,11 +88,10 @@ class ChatApp extends StatelessWidget {
         '/login': (_) => const LoginPage(),
         '/signup': (_) => const SignupPage(),
         '/t_home': (_) => const THome(),
-<<<<<<< HEAD
+
         '/teacherProfilePage': (_) =>  TeacherProfilePage(),
-=======
-        '/teacherProfilePage': (_) => const TeacherProfilePage(),
->>>>>>> 417d554df605b5e72977972d923a45863fc10ff9
+
+       // '/teacherProfilePage': (_) => const TeacherProfilePage(),
         '/t_class': (_) => const TClass(),
         '/teacher_schedule_page': (_) => TeacherSchedulesPage(),
         '/teacher_list_page': (_) => TeachersListPage(),
